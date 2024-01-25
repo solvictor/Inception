@@ -43,11 +43,11 @@ services:
         ORGANIZATION: ${ORGANIZATION}
         UNIT: ${UNIT}
         COMMON_NAME: ${COMMON_NAME}
-    ports:
+    ports: # Redirige le port 443 de l'hote vers le port 443 du conteneur
       - '443:443'
     volumes:
       - wordpress_files:/var/www/inception/
-    networks:
+    networks: # Le module sera sur le reseau "all"
       - all
     init: true
     restart: on-failure
