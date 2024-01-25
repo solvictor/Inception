@@ -11,13 +11,13 @@ all: $(NAME)
 
 $(NAME): up
 
-# puts the url in the host files and starts the containers trough docker compose
+# Ajoute l'url puis demarre les containers
 up: create_dir
 	@sudo hostsed add 127.0.0.1 $(HOST_URL) > $(HIDE) && echo " $(HOST_ADD)"
 	@docker compose -p $(NAME) -f $(COMPOSE) up --build || (echo " $(FAIL)" && exit 1)
 	@echo " $(UP)"
 
-# stops the containers through docker compose
+# Stop les containers
 down:
 	@docker compose -p $(NAME) down
 	@echo " $(DOWN)"
@@ -26,18 +26,18 @@ create_dir:
 	@mkdir -p ~/data/database
 	@mkdir -p ~/data/wordpress_files
 
-# creates a backup of the data folder in the home directory
+# Fait une sauvegarde des du dossier contenant les donnees
 backup:
 	@if [ -d ~/data ]; then sudo tar -czvf ~/data.tar.gz -C ~/ data/ > $(HIDE) && echo " $(BKP)" ; fi
 
-# stop the containers, remove the volumes and remove the containers
+# Stop les containers puis supprime les fichiers
 clean:
 	@docker compose -f $(COMPOSE) down -v
 	@if [ -n "$$(docker ps -a --filter "name=nginx" -q)" ]; then docker rm -f nginx > $(HIDE) && echo " $(NX_CLN)" ; fi
 	@if [ -n "$$(docker ps -a --filter "name=wordpress" -q)" ]; then docker rm -f wordpress > $(HIDE) && echo " $(WP_CLN)" ; fi
 	@if [ -n "$$(docker ps -a --filter "name=mariadb" -q)" ]; then docker rm -f mariadb > $(HIDE) && echo " $(DB_CLN)" ; fi
 
-# backups the data and removes the containers, images and the host url from the host file
+# Sauvegarde les fichiers avant de les supprimer
 fclean: clean backup
 	@sudo rm -rf ~/data
 	@if [ -n "$$(docker image ls $(NAME)-nginx -q)" ]; then docker image rm -f $(NAME)-nginx > $(HIDE) && echo " $(NX_FLN)" ; fi
@@ -57,7 +57,7 @@ status:
 	@docker network ls --filter "name=$(NAME)_all"
 	@echo ""
 
-# remove all containers, images, volumes and networks to start with a clean state
+# Supprime tout les containers et leurs fichiers
 prepare:
 	@echo "\nPreparing to start with a clean state..."
 	@echo "\nCONTAINERS STOPPED\n"

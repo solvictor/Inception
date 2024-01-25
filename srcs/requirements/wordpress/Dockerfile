@@ -1,9 +1,3 @@
-# the RUN sed changes the php.ini file to fix the path info
-# RUN wget downloads the wp-cli.phar file that is used to install wordpress through the command line
-# at the end creates the folders and set the permissions to the www-data user
-# the runs the setup.sh script that is used to install wordpress
-# and start the php-fpm8.2 server in the foreground
-
 # On utilise la derniere image de debian
 FROM	debian:bookworm
 
