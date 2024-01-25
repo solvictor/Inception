@@ -1,8 +1,6 @@
 services:
 
-  # mariadb container ------------------------------------------------------------
-
-  # this is the only container that no depend on the others, so its the first to be created
+  # On cree d'abord le container mariadb car il ne depends pas des autres
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb/
@@ -15,9 +13,7 @@ services:
     env_file:
       - .env
 
-  # wordpress container ------------------------------------------------------------
-
-  # this is the second container to be created, it depends on the mariadb container
+  # On cree ensuite le container wordpress qui depend de mariadb
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress/
@@ -32,11 +28,7 @@ services:
     depends_on:
       - mariadb
 
-  # nginx container ------------------------------------------------------------
-
-  # this is the last container to be created, it depends on the wordpress container
-  # it use args to pass the certificate and key path to the Dockerfile
-  # in the build moment with show the private informations that where in the .env file
+  # On cree enfin le container nginx qui depend de wordpress
   nginx:
     container_name: nginx
     build:
@@ -64,14 +56,10 @@ services:
     depends_on:
       - wordpress
 
-# volumes --------------------------------------------------------------------
-
-# keeps the data shared between the containers
-# it acts like a shared hard drive between the containers and the host machine
-# device: where the data will be stored in the host machine
+# On cree des volumes pour les containers qui en ont besoin
 volumes:
 
-  # keeps the database
+  # Fichiers de la base de donnee
   database:
     driver: local
     driver_opts:
@@ -79,7 +67,7 @@ volumes:
       o: bind
       device: ~/data/database
 
-  # keeps the wordpress files
+  # Fichiers de wordpress
   wordpress_files:
     driver: local
     driver_opts:
@@ -87,12 +75,7 @@ volumes:
       o: bind
       device: ~/data/wordpress_files
 
-# networks --------------------------------------------------------------------
-
-# this network is used to connect the containers
-# it acts like a virtual switch between the containers
-# all is the name of the network
-# bridge is the type of the network
+# On cree un reseau "all" de type bridge qui se comportera comme un switch pour connecter les containers
 networks:
   all:
     driver: bridge

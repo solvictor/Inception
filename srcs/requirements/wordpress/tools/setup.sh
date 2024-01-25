@@ -1,26 +1,19 @@
 #!/bin/bash
 
-# this script run in the building container
-# it changes the ownership of the /var/www/inception/ folder to www-data user
-# then sure that the wp-config.php file is in the /var/www/inception/ folder
-# then it downloads the wordpress core files if they are not already there
-# then it installs wordpress if it is not already installed
-# and set the admin user and password if they are not already set
-# this variables are set in the .env file
-# the penultimate line download and activate the raft theme, that I liked most
-# at the end, exec $@ run the next CMD in the Dockerfile.
-# In this case: starts the php-fpm8.2 server in the foreground
-
+# On change le proprietaire des fichiers du site
 chown -R www-data:www-data /var/www/inception/
 
+# On s'assure que wp-config a bien ete copie
 if [ ! -f "/var/www/inception/wp-config.php" ]; then
    mv /tmp/wp-config.php /var/www/inception/
 fi
 
 sleep 10
 
+# On telecharge les fichiers de wordpress
 wp --allow-root --path="/var/www/inception/" core download || true
 
+# On installe les ficheirs telecharges
 if ! wp --allow-root --path="/var/www/inception/" core is-installed;
 then
     wp  --allow-root --path="/var/www/inception/" core install \
@@ -31,6 +24,7 @@ then
         --admin_email=$WP_ADMIN_EMAIL
 fi;
 
+# On cree l'administrateur du site
 if ! wp --allow-root --path="/var/www/inception/" user get $WP_USER;
 then
     wp  --allow-root --path="/var/www/inception/" user create \
@@ -40,10 +34,12 @@ then
         --role=$WP_ROLE
 fi;
 
+# On installe le theme raft
 wp --allow-root --path="/var/www/inception/" theme install raft --activate 
 
 # TODO Test si les perms sont bonnes sans ca
 # chown -R www-data:www-data /var/www/inception/
 # chmod -R 755 /var/www/*
 
+# On demarre php-fpm au premier plan
 exec $@
