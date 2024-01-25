@@ -11,18 +11,6 @@
 # at the end, exec $@ run the next CMD in the Dockerfile.
 # In this case: starts the php-fpm8.2 server in the foreground
 
-# set -ex # print commands & exit on error (debug mode)
-
-# WP_URL=login.42.fr
-# WP_TITLE=Inception
-# WP_ADMIN_USER=theroot
-# WP_ADMIN_PASSWORD=123
-# WP_ADMIN_EMAIL=theroot@123.com
-# WP_USER=theuser
-# WP_PASSWORD=abc
-# WP_EMAIL=theuser@123.com
-# WP_ROLE=editor
-
 chown -R www-data:www-data /var/www/inception/
 
 if [ ! -f "/var/www/inception/wp-config.php" ]; then
@@ -54,7 +42,8 @@ fi;
 
 wp --allow-root --path="/var/www/inception/" theme install raft --activate 
 
-chown -R www-data:www-data /var/www/inception/
-chmod -R 755 /var/www/*
+# TODO Test si les perms sont bonnes sans ca
+# chown -R www-data:www-data /var/www/inception/
+# chmod -R 755 /var/www/*
 
 exec $@

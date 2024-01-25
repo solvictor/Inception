@@ -1,7 +1,7 @@
 # On utilise la derniere image de debian
 FROM	debian:bookworm
 
-# Cette image utilisera le port 3306 pour communiquer
+# Cette image utilisera le port 443 pour communiquer
 EXPOSE	443
 
 # Mise a jour des packages et installation de nginx et OpenSSL et supression de la liste des packages telecharges pour reduire la taille de l'image
