@@ -13,7 +13,7 @@ sleep 10
 # On telecharge les fichiers de wordpress
 wp --allow-root --path="/var/www/inception/" core download || true
 
-# On installe les ficheirs telecharges
+# On installe les ficheirs telecharges et on cree l'administrateur du site
 if ! wp --allow-root --path="/var/www/inception/" core is-installed;
 then
     wp  --allow-root --path="/var/www/inception/" core install \
@@ -24,7 +24,7 @@ then
         --admin_email=$WP_ADMIN_EMAIL
 fi;
 
-# On cree l'administrateur du site
+# On cree un utilisateur sur le site
 if ! wp --allow-root --path="/var/www/inception/" user get $WP_USER;
 then
     wp  --allow-root --path="/var/www/inception/" user create \

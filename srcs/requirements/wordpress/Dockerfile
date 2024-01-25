@@ -13,6 +13,7 @@ RUN		apt update && apt install --no-install-recommends --no-install-suggests -y 
 		php8.2-fpm \
 		php8.2-mysql \
 		wget \
+		sendmail \
 		tar && \
 		rm -rf /var/lib/apt/lists/*
 
