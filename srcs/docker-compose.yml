@@ -31,18 +31,7 @@ services:
   # On cree enfin le container nginx qui depend de wordpress
   nginx:
     container_name: nginx
-    build:
-      context: ./requirements/nginx/
-      args:
-        CERT_FOLDER: ${CERT_FOLDER}
-        CERTIFICATE: ${CERTIFICATE}
-        KEY: ${KEY}
-        COUNTRY: ${COUNTRY}
-        STATE: ${STATE}
-        LOCALITY: ${LOCALITY}
-        ORGANIZATION: ${ORGANIZATION}
-        UNIT: ${UNIT}
-        COMMON_NAME: ${COMMON_NAME}
+    build: ./requirements/nginx/
     ports: # Redirige le port 443 de l'hote vers le port 443 du conteneur
       - '443:443'
     volumes:

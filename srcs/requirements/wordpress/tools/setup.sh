@@ -8,7 +8,7 @@ if [ ! -f "/var/www/inception/wp-config.php" ]; then
    mv /tmp/wp-config.php /var/www/inception/
 fi
 
-sleep 10
+sleep 20
 
 # On telecharge les fichiers de wordpress
 wp --allow-root --path="/var/www/inception/" core download || true
@@ -22,6 +22,9 @@ then
         --admin_user=$WP_ADMIN_USER \
         --admin_password=$WP_ADMIN_PASSWORD \
         --admin_email=$WP_ADMIN_EMAIL
+    # On supprime un plugin inutiles
+    wp --allow-root --path="/var/www/inception/" plugin delete hello
+    wp --allow-root --path="/var/www/inception/" plugin delete akismet
 fi;
 
 # On cree un utilisateur sur le site
@@ -34,12 +37,8 @@ then
         --role=$WP_ROLE
 fi;
 
-# On installe le theme raft
-wp --allow-root --path="/var/www/inception/" theme install raft --activate 
-
-# TODO Test si les perms sont bonnes sans ca
-# chown -R www-data:www-data /var/www/inception/
-# chmod -R 755 /var/www/*
+chown -R www-data:www-data /var/www/inception/
+chmod -R 755 /var/www/*
 
 # On demarre php-fpm au premier plan
 exec $@

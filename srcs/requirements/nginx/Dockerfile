@@ -10,25 +10,16 @@ RUN		apt update && apt install -y --no-install-recommends --no-install-suggests 
 		openssl && \
 		rm -rf /var/lib/apt/lists/*
 
-# Definition des arguments pour les informations du certificat SSL
-ARG		CERT_FOLDER CERTIFICATE KEY COUNTRY STATE LOCALITY ORGANIZATION UNIT COMMON_NAME
-
 # Creation du repertoire pour le certificat SSL et generation du certificat auto-signe
-RUN mkdir -p ${CERT_FOLDER} && \
+RUN mkdir -p /etc/nginx/certs/ && \
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-    -out ${CERTIFICATE} \
-    -keyout ${KEY} \
-    -subj "/C=${COUNTRY}/ST=${STATE}/L=${LOCALITY}/O=${ORGANIZATION}/OU=${UNIT}/CN=${COMMON_NAME}"
+    -out /etc/nginx/certs/certificate.crt \
+    -keyout /etc/nginx/certs/certificate.key \
+    -subj "/C=FR/ST=IDF/L=paris/O=42/OU=42/CN=vegret.42.fr"
 
 # Copie des fichiers de configuration Nginx
 COPY	conf/nginx.conf	/etc/nginx/
 COPY	conf/server.conf	/etc/nginx/conf.d/
-
-# Ajout des informations au fichier de configuration du serveur Nginx
-RUN		echo "\tserver name ${COMMON_NAME};\n\
-			\tssl_certificate ${CERTIFICATE};\n\
-			\tssl_certificate_key ${KEY};\n\
-			}" >> /etc/nginx/conf.d/server.conf
 
 # Creation un repertoire pour le contenu du site web et mise a jour des permissions
 RUN		mkdir -p /var/www/
