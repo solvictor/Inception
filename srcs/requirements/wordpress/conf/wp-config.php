@@ -30,6 +30,12 @@ define( 'WP_SITEURL', getenv('WP_FULL_URL') );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 
+// Configuration pour utiliser Redis comme cache
+define('WP_REDIS_HOST', 'redis'); // Nom du service Redis dans le reseau Docker
+define('WP_REDIS_PORT', 6379); // Port par defaut de Redis
+define('WP_CACHE_KEY_SALT', getenv('WP_URL') ); // 
+define('WP_REDIS_CLIENT', 'phpredis'); // 
+
 /**#@+
  * Authentication unique keys and salts.
  *

@@ -13,7 +13,7 @@ sleep 20
 # On telecharge les fichiers de wordpress
 wp --allow-root --path="/var/www/inception/" core download || true
 
-# On installe les ficheirs telecharges et on cree l'administrateur du site
+# On installe les fichiers telecharges et on cree l'administrateur du site
 if ! wp --allow-root --path="/var/www/inception/" core is-installed;
 then
     wp  --allow-root --path="/var/www/inception/" core install \
@@ -25,6 +25,16 @@ then
     # On supprime un plugin inutiles
     wp --allow-root --path="/var/www/inception/" plugin delete hello
     wp --allow-root --path="/var/www/inception/" plugin delete akismet
+    # On installe redis
+    wp --allow-root --path="/var/www/inception/" plugin install --activate redis-cache
+    wp --allow-root --path="/var/www/inception/" plugin update --all
+    wp --allow-root --path="/var/www/inception/" redis enable
+fi;
+
+if ! wp --allow-root --path="/var/www/inception/" core is-installed;
+then
+    echo "Failed to install wordpress"
+    exit 1
 fi;
 
 # On cree un utilisateur sur le site

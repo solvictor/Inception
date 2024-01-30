@@ -13,6 +13,33 @@ services:
     env_file:
       - .env
 
+  # On cree aussi le container redis
+  redis:
+    container_name: redis
+    build: ./requirements/bonus/redis
+    depends_on:
+      - wordpress
+    ports:
+     - '6379:6379'
+    restart: on-failure
+    env_file:
+      - .env
+    volumes:
+      - wordpress_files:/var/www/inception
+    networks:
+      - all
+  
+  # On cree aussi le container adminer
+  adminer:
+    build: ./requirements/bonus/adminer
+    restart: on-failure
+    depends_on:
+      - mariadb
+    expose:
+     - "8000"
+    networks:
+      - all
+
   # On cree ensuite le container wordpress qui depend de mariadb
   wordpress:
     container_name: wordpress
@@ -44,6 +71,8 @@ services:
       - .env
     depends_on:
       - wordpress
+      - adminer
+      - redis
 
 # On cree des volumes pour les containers qui en ont besoin
 volumes:

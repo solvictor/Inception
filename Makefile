@@ -36,6 +36,8 @@ clean:
 	@if [ -n "$$(docker ps -a --filter "name=nginx" -q)" ]; then docker rm -f nginx > $(HIDE) && echo " $(NX_CLN)" ; fi
 	@if [ -n "$$(docker ps -a --filter "name=wordpress" -q)" ]; then docker rm -f wordpress > $(HIDE) && echo " $(WP_CLN)" ; fi
 	@if [ -n "$$(docker ps -a --filter "name=mariadb" -q)" ]; then docker rm -f mariadb > $(HIDE) && echo " $(DB_CLN)" ; fi
+	@if [ -n "$$(docker ps -a --filter "name=redis" -q)" ]; then docker rm -f redis > $(HIDE) && echo " $(RD_CLN)" ; fi
+	@if [ -n "$$(docker ps -a --filter "name=adminer" -q)" ]; then docker rm -f adminer > $(HIDE) && echo " $(AM_CLN)" ; fi
 
 # Sauvegarde les fichiers avant de les supprimer
 fclean: clean backup
@@ -43,6 +45,8 @@ fclean: clean backup
 	@if [ -n "$$(docker image ls $(NAME)-nginx -q)" ]; then docker image rm -f $(NAME)-nginx > $(HIDE) && echo " $(NX_FLN)" ; fi
 	@if [ -n "$$(docker image ls $(NAME)-wordpress -q)" ]; then docker image rm -f $(NAME)-wordpress > $(HIDE) && echo " $(WP_FLN)" ; fi
 	@if [ -n "$$(docker image ls $(NAME)-mariadb -q)" ]; then docker image rm -f $(NAME)-mariadb > $(HIDE) && echo " $(DB_FLN)" ; fi
+	@if [ -n "$$(docker image ls $(NAME)-redis -q)" ]; then docker image rm -f $(NAME)-redis > $(HIDE) && echo " $(RD_FLN)" ; fi
+	@if [ -n "$$(docker image ls $(NAME)-adminer -q)" ]; then docker image rm -f $(NAME)-adminer > $(HIDE) && echo " $(AM_FLN)" ; fi
 	@sudo hostsed rm 127.0.0.1 $(HOST_URL) > $(HIDE) && echo " $(HOST_RM)"
 
 status:
@@ -102,10 +106,14 @@ HOST_RM		= $(MARK) Host $(HOST_URL)		$(REMOVED)
 NX_CLN		= $(MARK) Container nginx		$(REMOVED)
 WP_CLN		= $(MARK) Container wordpress		$(REMOVED)
 DB_CLN		= $(MARK) Container mariadb		$(REMOVED)
+RD_CLN		= $(MARK) Container redis		$(REMOVED)
+AM_CLN		= $(MARK) Container adminer		$(REMOVED)
 
 NX_FLN		= $(MARK) Image $(NAME)-nginx	$(REMOVED)
 WP_FLN		= $(MARK) Image $(NAME)-wordpress	$(REMOVED)
 DB_FLN		= $(MARK) Image $(NAME)-mariadb	$(REMOVED)
+RD_FLN		= $(MARK) Image $(NAME)-redis	$(REMOVED)
+AM_FLN		= $(MARK) Image $(NAME)-adminer	$(REMOVED)
 
 BKP			= $(MARK) Backup at $(HOME)	$(CREATED)
 

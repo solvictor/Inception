@@ -11,11 +11,11 @@ RUN		apt update && apt install -y --no-install-recommends --no-install-suggests 
 		rm -rf /var/lib/apt/lists/*
 
 # Creation du repertoire pour le certificat SSL et generation du certificat auto-signe
-RUN mkdir -p /etc/nginx/certs/ && \
-	openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-    -out /etc/nginx/certs/certificate.crt \
-    -keyout /etc/nginx/certs/certificate.key \
-    -subj "/C=FR/ST=IDF/L=paris/O=42/OU=42/CN=vegret.42.fr"
+RUN		mkdir -p /etc/nginx/certs/ && \
+		openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+		-out /etc/nginx/certs/certificate.crt \
+		-keyout /etc/nginx/certs/certificate.key \
+		-subj "/C=FR/ST=IDF/L=paris/O=42/OU=42/CN=vegret.42.fr"
 
 # Copie des fichiers de configuration Nginx
 COPY	conf/nginx.conf	/etc/nginx/

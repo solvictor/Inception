@@ -12,6 +12,7 @@ RUN		apt update && apt install --no-install-recommends --no-install-suggests -y 
 		ca-certificates \
 		php8.2-fpm \
 		php8.2-mysql \
+		php-redis \
 		wget \
 		sendmail \
 		tar && \
@@ -38,9 +39,6 @@ RUN		wget --no-check-certificate https://raw.githubusercontent.com/wp-cli/builds
 RUN		mkdir -p /run/php/ && \
 		mkdir -p /var/run/php/ && \
 		mkdir -p /var/www/inception/
-
-# Mise a jour des permissions de l'arborescence du site
-RUN		chown -R www-data:www-data /var/www/inception/
 
 # Copie de la configuration WP-Config
 COPY	conf/wp-config.php /tmp/
