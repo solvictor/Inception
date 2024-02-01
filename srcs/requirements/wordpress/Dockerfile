@@ -1,25 +1,25 @@
-# On utilise la derniere image de debian
-FROM	debian:bookworm
+# On utilise l'avant derniere image de debian
+FROM	debian:bullseye
 
 # Cette image utilisera le port 9000 pour communiquer
 EXPOSE	9000
 
 # Definition des arguments pour le chemin vers PHP-FPM
-ARG		PHPPATH=/etc/php/8.2/fpm
+ARG		PHPPATH=/etc/php/7.4/fpm
 
 # Mise a jour des packages et installation de PHP et de certaines dependances
 RUN		apt update && apt install --no-install-recommends --no-install-suggests -y \
 		ca-certificates \
-		php8.2-fpm \
-		php8.2-mysql \
+		php7.4-fpm \
+		php7.4-mysql \
 		php-redis \
 		wget \
 		sendmail \
 		tar && \
 		rm -rf /var/lib/apt/lists/*
 
-# Arret du service php8.2-fpm (si jamais il s'executais)
-RUN		service php8.2-fpm stop
+# Arret du service php7.4-fpm (si jamais il s'executais)
+RUN		service php7.4-fpm stop
 
 # Copie de la configuration PHP-FPM personnalisee
 COPY	conf/www.conf ${PHPPATH}/pool.d/
@@ -48,4 +48,4 @@ COPY	tools/setup.sh /bin/
 RUN		chmod +x /bin/setup.sh
 
 # Execution du script de configuration
-CMD		["setup.sh", "php-fpm8.2", "--nodaemonize"]
+CMD		["setup.sh", "php-fpm7.4", "--nodaemonize"]

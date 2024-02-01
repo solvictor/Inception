@@ -1,5 +1,5 @@
-# On utilise la derniere image de debian
-FROM	debian:bookworm
+# On utilise l'avant derniere image de debian
+FROM	debian:bullseye
 
 # Cette image utilisera le port 3306 pour communiquer
 EXPOSE	3306

@@ -1,3 +1,5 @@
+version: '3'
+
 services:
 
   # On cree d'abord le container mariadb car il ne depends pas des autres
@@ -31,12 +33,14 @@ services:
   
   # On cree aussi le container adminer
   adminer:
+    container_name: adminer
     build: ./requirements/bonus/adminer
     restart: on-failure
     depends_on:
+      - wordpress
       - mariadb
-    expose:
-     - "8000"
+    ports:
+      - "8080:8080"
     networks:
       - all
 
